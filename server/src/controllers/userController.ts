@@ -32,3 +32,27 @@ export const register = async (req: Request, res: Response) => {
         return res.status(400).json({ message: "An unexpected error occurred" });
     }
 }
+
+export const signIn = async (req: Request, res: Response) => {
+    try {
+        const { email, password } = req.body
+        const { otp } = req.params
+        if (!email || !password || !otp) return res.status(400);
+
+        const user = await getUserByEmail(email).select('+password');
+        if (!user) return res.status(400).json({ message: "user not found" })
+
+        if (user.otp !== Number(otp)) return res.status(400).json({ message: "Invalid otp" })
+
+        const expectedHash = await authentication(SALT, password)
+        if (user.password !== expectedHash) return res.status(403).json({ message: "Invalid credentials" })
+
+        user.verified = true
+        await user.save()
+
+        res.status(200).json({ message: "User has been successfully verified" })
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({ message: "An unexpected error occurred" });
+    }
+}
