@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import TextField from "@mui/material/TextField";
 import { Grid, Paper, Stack, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
@@ -16,6 +17,10 @@ import SigninImg from "../assets/Signin.png";
 const Signin = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -25,10 +30,24 @@ const Signin = () => {
     event.preventDefault();
   };
 
+  const handleSubmit = async () => {
+ 
+    try {
+      const response = await axios.post(process.env.VITE_API+"/signin", formData);
+      console.log(response); 
+      navigate("/success");
+      // Reset the form data
+      setFormData({ email: "", password: "" });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+
   return (
     <Grid
       container
-       style={{
+      style={{
         height: "100vh",
         width: "100%",
         alignItems: "center",
@@ -36,21 +55,21 @@ const Signin = () => {
       }}
     >
       <Grid
-         item
-         xs={12}
-         md={6}
-         sm={6}
-         style={{
-           display: "flex",
-           justifyContent: "center",
-           alignItems: "center",
-         
-           
-         }}
+        item
+        xs={12}
+        md={6}
+        sm={6}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
-      
-          <img src={SigninImg} alt="helo" style={{ maxWidth: "100%", height:"auto" }} />
-        
+        <img
+          src={SigninImg}
+          alt="helo"
+          style={{ maxWidth: "100%", height: "auto" }}
+        />
       </Grid>
       <Grid
         item
@@ -82,6 +101,10 @@ const Signin = () => {
               label="Enter Email"
               type="email"
               variant="standard"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
             <FormControl sx={{ m: 1, width: "100%" }} variant="standard">
               <InputLabel htmlFor="standard-adornment-password">
@@ -102,6 +125,10 @@ const Signin = () => {
                     </IconButton>
                   </InputAdornment>
                 }
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
               />
             </FormControl>
 
@@ -116,26 +143,28 @@ const Signin = () => {
                 paddingY: 1.5,
                 borderRadius: 2.5,
               }}
+              onClick={handleSubmit}
             >
               Sign In
             </Button>
-            <Button
-              variant="contained"
-              onClick={() => navigate("/")}
-              sx={{
-                backgroundColor: "#ffffff",
-                color: "#3A244A",
-                border: "2px solid",
-                fontWeight: "bold",
-                "&:hover": {
-                  backgroundColor: "#ffffff",
-                },
-                paddingY: 1.5,
-                borderRadius: 2.5,
-              }}
-            >
-              Sign Up
-            </Button>
+            
+        <Button
+        variant="contained"
+        onClick={() => navigate("/")}
+        sx={{
+          backgroundColor: "#ffffff",
+          color: "#3A244A",
+          border: "2px solid",
+          fontWeight: "bold",
+          "&:hover": {
+            backgroundColor: "#ffffff",
+          },
+          paddingY: 1.5,
+          borderRadius: 2.5,
+        }}
+      >
+        Sign Up
+      </Button>
           </Stack>
         </Paper>
       </Grid>

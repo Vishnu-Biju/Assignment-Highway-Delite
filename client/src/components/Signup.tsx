@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
+import axios from "axios";
 import TextField from "@mui/material/TextField";
 import { Menu, Paper, Stack, Typography } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
@@ -17,8 +18,10 @@ import SignupImg from "../assets/Signup.png";
 import Grid from "@mui/material/Grid";
 
 const Signup: React.FC = () => {
-  // declare a new state variable for modal open
   const [open, setOpen] = useState(false);
+
+  const navigate = useNavigate();
+
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showPasswordRe, setShowPasswordRe] = useState<boolean>(true);
@@ -31,6 +34,14 @@ const Signup: React.FC = () => {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowPasswordRe = () => setShowPasswordRe((show) => !show);
+
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    contactMode: "",
+  });
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -49,16 +60,6 @@ const Signup: React.FC = () => {
     },
   ];
 
-  // function to handle modal open
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  // function to handle modal close
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const handleDropdown = (e: any) => {
     setAnchorEl(e.currentTarget);
   };
@@ -68,12 +69,40 @@ const Signup: React.FC = () => {
     setAnchorEl(null);
   };
 
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setPassword(value);
+    setPasswordMismatchError(value !== passwordConfirmation);
+  };
+
   const handlePasswordConfirmationChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const { value } = event.target;
     setPasswordConfirmation(value);
-    setPasswordMismatchError(value !== password);
+    setPasswordMismatchError(password !== value && value.length > 0);
+  };
+
+  const handleSubmit = async () => {
+    console.log(formData);
+    try {
+      const response = await axios.post(
+        process.env.VITE_API + "/signup",
+        formData
+      );
+      navigate("/success");
+      console.log(response.data);
+      // Reset the form data
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        contactMode: "",
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -95,16 +124,18 @@ const Signup: React.FC = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-        
-          
         }}
       >
-        <img src={SignupImg} alt="Signup" style={{ maxWidth: "100%", height:"auto" }} />
+        <img
+          src={SignupImg}
+          alt="Signup"
+          style={{ maxWidth: "100%", height: "auto" }}
+        />
       </Grid>
       <Grid item xs={12} md={6} sm={6} style={{ width: "100%" }}>
         <Paper
           sx={{ paddingX: 4, paddingY: 6, borderRadius: 4 }}
-          style={{ margin: "0 auto", width: "50%",padding:"28px" }}
+          style={{ margin: "0 auto", width: "50%", padding: "28px" }}
         >
           <Stack spacing={2}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -128,12 +159,20 @@ const Signup: React.FC = () => {
               label="First Name"
               variant="standard"
               fullWidth
+              value={formData.firstName}
+              onChange={(e) =>
+                setFormData({ ...formData, firstName: e.target.value })
+              }
             />
             <TextField
               id="standard-basic"
               label="Last Name"
               variant="standard"
               fullWidth
+              value={formData.lastName}
+              onChange={(e) =>
+                setFormData({ ...formData, lastName: e.target.value })
+              }
             />
             <FormControl sx={{ m: 1, width: "100%" }} variant="standard">
               <InputLabel htmlFor="standard-adornment-password">
@@ -154,7 +193,7 @@ const Signup: React.FC = () => {
                     </IconButton>
                   </InputAdornment>
                 }
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handlePasswordChange}
                 value={password}
               />
             </FormControl>
@@ -225,6 +264,10 @@ const Signup: React.FC = () => {
                     </Menu>
                   </InputAdornment>
                 }
+                onChange={(e) =>
+                  setFormData({ ...formData, contactMode: e.target.value })
+                }
+                value={formData.contactMode}
               />
             </FormControl>
             <TextField
@@ -233,6 +276,10 @@ const Signup: React.FC = () => {
               type="email"
               variant="standard"
               fullWidth
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
             <Button
               variant="contained"
@@ -245,6 +292,7 @@ const Signup: React.FC = () => {
                 paddingY: 1.5,
                 borderRadius: 2.5,
               }}
+              onClick={handleSubmit}
             >
               Sign Up
             </Button>
