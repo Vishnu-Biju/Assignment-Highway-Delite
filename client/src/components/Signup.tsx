@@ -14,6 +14,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
 import Button from "@mui/material/Button";
 import SignupImg from "../assets/Signup.png";
+import Grid from "@mui/material/Grid";
 
 const Signup: React.FC = () => {
   // declare a new state variable for modal open
@@ -76,32 +77,42 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <div
+    <Grid
+      container
       style={{
-        display: "flex",
         height: "100vh",
         width: "100%",
         alignItems: "center",
         justifyContent: "center",
       }}
     >
-      <div style={{ display: "flex" }}>
-        <Stack sx={{ width: "60%" }}>
-          <img src={SignupImg} alt="helo" />
-        </Stack>
+      <Grid
+        item
+        xs={12}
+        md={6}
+        sm={6}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        
+          
+        }}
+      >
+        <img src={SignupImg} alt="Signup" style={{ maxWidth: "100%", height:"auto" }} />
+      </Grid>
+      <Grid item xs={12} md={6} sm={6} style={{ width: "100%" }}>
         <Paper
-          sx={{ width: "40%", paddingX: 4, paddingY: 2, borderRadius: 4 }}
+          sx={{ paddingX: 4, paddingY: 6, borderRadius: 4 }}
+          style={{ margin: "0 auto", width: "50%",padding:"28px" }}
         >
           <Stack spacing={2}>
-            <div
-              style={{ display: "flex", justifyContent: "space-between" }}
-            >
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <Typography
                 variant="h4"
                 sx={{ color: "#3A244A", fontWeight: "bold" }}
               >
-                Let us know{" "}
-                <span style={{ color: "#D72638" }}>!</span>
+                Let us know <span style={{ color: "#D72638" }}>!</span>
               </Typography>
               <Link to="Signin">
                 <Typography
@@ -116,11 +127,13 @@ const Signup: React.FC = () => {
               id="standard-basic"
               label="First Name"
               variant="standard"
+              fullWidth
             />
             <TextField
               id="standard-basic"
               label="Last Name"
               variant="standard"
+              fullWidth
             />
             <FormControl sx={{ m: 1, width: "100%" }} variant="standard">
               <InputLabel htmlFor="standard-adornment-password">
@@ -219,6 +232,7 @@ const Signup: React.FC = () => {
               label="Enter Email"
               type="email"
               variant="standard"
+              fullWidth
             />
             <Button
               variant="contained"
@@ -236,8 +250,8 @@ const Signup: React.FC = () => {
             </Button>
           </Stack>
         </Paper>
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
 };
 
