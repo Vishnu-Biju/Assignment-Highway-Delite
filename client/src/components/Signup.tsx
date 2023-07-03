@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import { Menu, Paper, Stack, Typography } from "@mui/material";
-import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import Input from "@mui/material/Input";
@@ -15,7 +15,7 @@ import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined
 import Button from "@mui/material/Button";
 import SignupImg from "../assets/Signup.png";
 
-const Signup = () => {
+const Signup: React.FC = () => {
   // declare a new state variable for modal open
   const [open, setOpen] = useState(false);
 
@@ -24,7 +24,12 @@ const Signup = () => {
   const [contactMode, setContactMode] = useState<string>("Contact Mode");
   const [anchorEl, setAnchorEl] = useState<any>(null);
 
+  const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [passwordMismatchError, setPasswordMismatchError] = useState(false);
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPasswordRe = () => setShowPasswordRe((show) => !show);
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -62,6 +67,14 @@ const Signup = () => {
     setAnchorEl(null);
   };
 
+  const handlePasswordConfirmationChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { value } = event.target;
+    setPasswordConfirmation(value);
+    setPasswordMismatchError(value !== password);
+  };
+
   return (
     <div
       style={{
@@ -76,14 +89,29 @@ const Signup = () => {
         <Stack sx={{ width: "60%" }}>
           <img src={SignupImg} alt="helo" />
         </Stack>
-        <Paper sx={{ width: "40%", paddingX: 4, paddingY: 2, borderRadius: 4 }}>
+        <Paper
+          sx={{ width: "40%", paddingX: 4, paddingY: 2, borderRadius: 4 }}
+        >
           <Stack spacing={2}>
-            <Typography
-              variant="h4"
-              sx={{ color: "#3A244A", fontWeight: "bold" }}
+            <div
+              style={{ display: "flex", justifyContent: "space-between" }}
             >
-              Let us know <span style={{ color: "#D72638" }}>!</span>
-            </Typography>
+              <Typography
+                variant="h4"
+                sx={{ color: "#3A244A", fontWeight: "bold" }}
+              >
+                Let us know{" "}
+                <span style={{ color: "#D72638" }}>!</span>
+              </Typography>
+              <Link to="Signin">
+                <Typography
+                  variant="h6"
+                  sx={{ color: "#3A244A", fontSize: "small", placeSelf: "end" }}
+                >
+                  Sign <span style={{ color: "#D72638" }}>In</span>
+                </Typography>
+              </Link>
+            </div>
             <TextField
               id="standard-basic"
               label="First Name"
@@ -113,6 +141,8 @@ const Signup = () => {
                     </IconButton>
                   </InputAdornment>
                 }
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
               />
             </FormControl>
             <FormControl sx={{ m: 1, width: "100%" }} variant="standard">
@@ -127,14 +157,22 @@ const Signup = () => {
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      onClick={() => setShowPasswordRe((show) => !show)}
+                      onClick={handleClickShowPasswordRe}
                       onMouseDown={handleMouseDownPassword}
                     >
                       {showPasswordRe ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 }
+                onChange={handlePasswordConfirmationChange}
+                value={passwordConfirmation}
+                error={passwordMismatchError}
               />
+              {passwordMismatchError && (
+                <Typography variant="caption" color="error">
+                  Passwords do not match
+                </Typography>
+              )}
             </FormControl>
             <FormControl sx={{ m: 1, width: "100%" }} variant="standard">
               <InputLabel htmlFor="standard-adornment-password">
@@ -184,6 +222,7 @@ const Signup = () => {
             />
             <Button
               variant="contained"
+              style={{ marginTop: "30px" }}
               sx={{
                 backgroundColor: "#3A244A",
                 "&:hover": {
@@ -193,7 +232,7 @@ const Signup = () => {
                 borderRadius: 2.5,
               }}
             >
-              Send
+              Sign Up
             </Button>
           </Stack>
         </Paper>
