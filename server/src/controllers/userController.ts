@@ -50,7 +50,7 @@ export const signIn = async (req: Request, res: Response) => {
         user.verified = true
         await user.save()
 
-        res.status(200).json({ message: "User has been successfully verified" })
+        res.status(200).json({ message: "User has been successfully verified", user })
     } catch (err) {
         console.log(err);
         return res.status(400).json({ message: "An unexpected error occurred" });
