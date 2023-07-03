@@ -13,6 +13,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Button from "@mui/material/Button";
 import SigninImg from "../assets/Signin.png";
+const BaseURL = import.meta.env.VITE_API
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ const Signin = () => {
   const handleSubmit = async () => {
  
     try {
-      const response = await axios.post(process.env.VITE_API+"/signin", formData);
+      const response = await axios.post(BaseURL+"/signin", formData);
       console.log(response); 
       navigate("/success");
       // Reset the form data
