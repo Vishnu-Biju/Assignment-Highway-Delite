@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
-import { Paper, Stack, Typography } from "@mui/material";
+import { Grid, Paper, Stack, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Input from "@mui/material/Input";
 import InputLabel from "@mui/material/InputLabel";
@@ -14,9 +14,7 @@ import Button from "@mui/material/Button";
 import SigninImg from "../assets/Signin.png";
 
 const Signin = () => {
-  // declare a new state variable for modal open
   const navigate = useNavigate();
-
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -28,25 +26,47 @@ const Signin = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
+    <Grid
+      container
+       style={{
         height: "100vh",
         width: "100%",
         alignItems: "center",
         justifyContent: "center",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <Stack sx={{ width: "60%" }}>
-          <img src={SigninImg} alt="helo" />
-        </Stack>
+      <Grid
+         item
+         xs={12}
+         md={6}
+         sm={6}
+         style={{
+           display: "flex",
+           justifyContent: "center",
+           alignItems: "center",
+         
+           
+         }}
+      >
+      
+          <img src={SigninImg} alt="helo" style={{ maxWidth: "100%", height:"auto" }} />
+        
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        md={6}
+        sm={6}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Paper
           sx={{
-            width: "40%",
-            height: "100%",
-            paddingX: 5,
-            paddingY: 5,
+            width: "50%",
+            padding: 5,
             borderRadius: 4,
           }}
         >
@@ -86,7 +106,6 @@ const Signin = () => {
             </FormControl>
 
             <Button
-              
               variant="contained"
               style={{ marginTop: "30px" }}
               sx={{
@@ -119,8 +138,8 @@ const Signin = () => {
             </Button>
           </Stack>
         </Paper>
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
 };
 
