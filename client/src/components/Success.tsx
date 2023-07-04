@@ -17,7 +17,7 @@ const SuccessPage = () => {
   }, [navigate]);
 
   const { state } = location;
-  const { firstName, lastName, email, contactMode } = state.user;
+  const { firstName, lastName, email, contactMode } = state;
 
   return (
     <Grid
