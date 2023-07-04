@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
 import { Menu, Paper, Stack, Typography } from "@mui/material";
@@ -16,13 +16,12 @@ import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined
 import Button from "@mui/material/Button";
 import SignupImg from "../assets/Signup.png";
 import Grid from "@mui/material/Grid";
-const BaseURL = import.meta.env.VITE_API
+const BaseURL = import.meta.env.VITE_API;
 
 const Signup: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
-
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showPasswordRe, setShowPasswordRe] = useState<boolean>(true);
@@ -72,7 +71,7 @@ const Signup: React.FC = () => {
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    setFormData({ ...formData, password: value })
+    setFormData({ ...formData, password: value });
     setPassword(value);
     setPasswordMismatchError(value !== passwordConfirmation);
   };
@@ -88,10 +87,7 @@ const Signup: React.FC = () => {
   const handleSubmit = async () => {
     console.log(formData);
     try {
-      const response = await axios.post(
-        BaseURL + "/register",
-        formData
-      );
+      const response = await axios.post(BaseURL + "/register", formData);
       navigate("/signin");
       console.log(response.data);
       // Reset the form data
