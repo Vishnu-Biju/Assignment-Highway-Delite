@@ -1,9 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Modal from "react-modal";
 import axios from "axios";
-import TextField from "@mui/material/TextField";
+import { useNavigate } from "react-router-dom";
 import { Grid, Paper, Stack, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Input from "@mui/material/Input";
@@ -14,23 +12,23 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Button from "@mui/material/Button";
 import SigninImg from "../assets/Signin.png";
+import Popover from "@mui/material/Popover";
+import TextField from "@mui/material/TextField";
 
 const BaseURL = import.meta.env.VITE_API;
 
-Modal.setAppElement(document.body);
-
 const Signin = () => {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showOtpModal, setShowOtpModal] = useState<boolean>(false);
-  const [otp, setOtp] = useState<number>(0);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otp, setOtp] = useState(0);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const [passwordError, setPasswordError] = useState<string>("");
+  const [passwordError, setPasswordError] = useState("");
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -50,11 +48,10 @@ const Signin = () => {
           console.log("User has been successfully verified");
 
           setShowOtpModal(true);
-          
         } else {
           // OTP verification required
           console.log("OTP verification required");
-          
+          setShowOtpModal(true);
         }
       } else {
         // Sign-in failed
@@ -90,7 +87,7 @@ const Signin = () => {
             contactMode: response.data.user.contactMode,
           },
         });
-
+      } else {
         // Sign-in failed
         console.log(response.data.message);
         setPasswordError("Incorrect password. Please try again.");
@@ -100,6 +97,9 @@ const Signin = () => {
       setPasswordError("An unexpected error occurred. Please try again later.");
     }
   };
+
+  const openOtpModal = Boolean(showOtpModal);
+  const otpModalId = openOtpModal ? "otp-modal" : undefined;
 
   return (
     <Grid
@@ -151,7 +151,8 @@ const Signin = () => {
               variant="h4"
               sx={{ color: "#3A244A", fontWeight: "bold" }}
             >
-              Fill what we know <span style={{ color: "#D72638" }}>!</span>
+              Fill what we know{" "}
+              <span style={{ color: "#D72638" }}>!</span>
             </Typography>
             <TextField
               id="standard-basic"
@@ -233,44 +234,38 @@ const Signin = () => {
       </Grid>
 
       {/* OTP Modal */}
-      <Modal
-        isOpen={showOtpModal}
-        onRequestClose={() => setShowOtpModal(false)}
-        contentLabel="OTP Modal"
-        style={{
-          overlay: {
-            background: "rgba(0, 0, 0, 0.5)",
-          },
-          content: {
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "300px",
-            height: "200px", // Adjust the height to make it smaller
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#ffffff",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-          },
+      <Popover
+        id={otpModalId}
+        open={openOtpModal}
+        onClose={() => setShowOtpModal(false)}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "center",
         }}
       >
         <Stack spacing={2} style={{ padding: "20px" }}>
-          <Typography variant="h4">Enter OTP</Typography>
+          <Typography variant="h5" sx={{ color: "#3A244A" }}>
+            OTP Verification
+          </Typography>
+          <Typography variant="body1" sx={{ color: "#3A244A" }}>
+            An OTP has been sent to your email. Please enter it below to
+            verify.
+          </Typography>
           <TextField
-            id="otp"
+            id="otp-input"
             label="OTP"
             type="number"
-            variant="standard"
-           
+            variant="outlined"
+            value={otp}
             onChange={(e) => setOtp(Number(e.target.value))}
           />
           <Button
             variant="contained"
-            style={{ marginTop: "30px" }}
+            onClick={handleOtpSubmit}
             sx={{
               backgroundColor: "#3A244A",
               "&:hover": {
@@ -279,12 +274,11 @@ const Signin = () => {
               paddingY: 1.5,
               borderRadius: 2.5,
             }}
-            onClick={handleOtpSubmit}
           >
-            Submit
+            Verify
           </Button>
         </Stack>
-      </Modal>
+      </Popover>
     </Grid>
   );
 };
