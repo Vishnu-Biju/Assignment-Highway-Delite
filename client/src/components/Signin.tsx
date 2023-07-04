@@ -23,7 +23,7 @@ const Signin = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showOtpModal, setShowOtpModal] = useState<boolean>(false);
-  const [otp, setOtp] = useState<number | null>(null);
+  const [otp, setOtp] = useState<number>(0);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -50,11 +50,11 @@ const Signin = () => {
           console.log("User has been successfully verified");
 
           setShowOtpModal(true);
-          // Proceed with further actions for signed-in user
+          
         } else {
           // OTP verification required
           console.log("OTP verification required");
-          // Show OTP verification form/modal and proceed accordingly
+          
         }
       } else {
         // Sign-in failed
@@ -265,7 +265,7 @@ const Signin = () => {
             label="OTP"
             type="number"
             variant="standard"
-            value={otp}
+           
             onChange={(e) => setOtp(Number(e.target.value))}
           />
           <Button
