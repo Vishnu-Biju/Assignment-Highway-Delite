@@ -19,7 +19,7 @@ import Grid from "@mui/material/Grid";
 const BaseURL = import.meta.env.VITE_API;
 
 const Signup: React.FC = () => {
-  const [open, setOpen] = useState(false);
+  
 
   const navigate = useNavigate();
 
