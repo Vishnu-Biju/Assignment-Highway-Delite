@@ -59,8 +59,7 @@ Include screenshots of your application here to showcase its features and user i
 ![Screenshot (71)](https://github.com/Vishnu-Biju/Assignment-Highway-Delite/assets/117735067/360fd444-5dd2-4ed7-aa58-7fbb851fce51)
 
 ## Contributing
-
-Contributions to this project are welcome. If you find any issues or want to add new features, feel free to submit a pull request.
+ If you find any issues or want to add new features, feel free to submit a pull request.
 
 ## License
 
