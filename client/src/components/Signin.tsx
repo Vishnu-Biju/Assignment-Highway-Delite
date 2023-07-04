@@ -23,7 +23,7 @@ const Signin = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showOtpModal, setShowOtpModal] = useState<boolean>(false);
-  const [otp, setOtp] = useState<number>(0);
+  const [otp, setOtp] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -82,8 +82,16 @@ const Signin = () => {
         // Sign-in successful
         console.log("User has been successfully verified");
         setFormData({ email: "", password: "" });
-        navigate("/success", { state: { user: response.data.user } });
-      } else {
+        navigate("/success", {
+          state: {
+            firstName: response.data.user.firstName,
+            lastName: response.data.user.lastName,
+            email: response.data.user.email,
+            contactMode: response.data.user.contactMode,
+          },
+        });
+        
+
         // Sign-in failed
         console.log(response.data.message);
         setPasswordError("Incorrect password. Please try again.");

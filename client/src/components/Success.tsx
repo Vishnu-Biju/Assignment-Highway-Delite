@@ -1,9 +1,23 @@
-
-import { useParams } from "react-router-dom";
 import { Typography, Paper, Grid } from "@mui/material";
+import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const SuccessPage = () => {
-  const { firstName, lastName, email, contactMode } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Redirect to login page after 20 seconds
+    const redirectTimeout = setTimeout(() => {
+      navigate("/signin");
+    }, 20000); // 20 seconds
+
+    // Clean up the timeout when the component unmounts
+    return () => clearTimeout(redirectTimeout);
+  }, [navigate]);
+
+  const { state } = location;
+  const { firstName, lastName, email, contactMode } = state.user;
 
   return (
     <Grid
@@ -33,13 +47,15 @@ const SuccessPage = () => {
             Congratulations! Your registration/login is successful.
           </Typography>
           <Typography variant="body1" sx={{ marginTop: 2 }}>
-            <span style={{ color: "#D72638" }}>Name:</span> {firstName} {lastName}
+            <span style={{ color: "#D72638" }}>Name:</span> {firstName}{" "}
+            {lastName}
           </Typography>
           <Typography variant="body1">
             <span style={{ color: "#D72638" }}>Email:</span> {email}
           </Typography>
           <Typography variant="body1">
-            <span style={{ color: "#D72638" }}>Contact Mode:</span> {contactMode}
+            <span style={{ color: "#D72638" }}>Contact Mode:</span>{" "}
+            {contactMode}
           </Typography>
         </Paper>
       </Grid>
