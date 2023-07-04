@@ -23,7 +23,7 @@ const Signin = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showOtpModal, setShowOtpModal] = useState<boolean>(false);
-  const [otp, setOtp] = useState<number>( );
+  const [otp, setOtp] = useState<number>(0);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
