@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        select: false
+        
     },
     contactMode: {
         type: String,
@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-export const User = mongoose.model('User', userSchema)
+export const User = mongoose.model('User', userSchema);
 
 export const getUser = () => User.find();
 export const getUserByEmail = (email: string) => User.findOne({ email });
