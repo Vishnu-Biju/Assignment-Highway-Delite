@@ -73,10 +73,10 @@ export const register = async (req: Request, res: Response) => {
   
   // ...
   
-  export const submitOTP = async (req: Request, res: Response) => {
-    try {
-      const { email } = req.body;
-      const { otp } = req.params;
+ export const submitOTP = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    const { otp } = req.params;
   
       if (!email || !otp) {
         return res.status(400).json({ message: 'Email and OTP are required' });

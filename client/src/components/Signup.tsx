@@ -92,7 +92,7 @@ const Signup: React.FC = () => {
         BaseURL + "/register",
         formData
       );
-      navigate("/success");
+      navigate("/signin");
       console.log(response.data);
       // Reset the form data
       setFormData({
