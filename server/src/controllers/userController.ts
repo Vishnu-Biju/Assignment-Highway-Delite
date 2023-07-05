@@ -33,7 +33,7 @@ export const register = async (req: Request, res: Response) => {
       });
   
       await sendMail(
-         `Please verify your email with otp=${otp}`,
+        `Please verify your email with ${process.env.CLIENT_URL}?otp=${otp}`,
         email,
         'Mail verification'
       );
@@ -73,23 +73,31 @@ export const register = async (req: Request, res: Response) => {
   
   // ...
   
- export const submitOTP = async (req: Request, res: Response) => {
-  try {
-    const { email } = req.body;
-    const { otp } = req.params;
-  
+  export const submitOTP = async (req: Request, res: Response) => {
+    try {
+      const { email, otp } = req.body;
+    
       if (!email || !otp) {
         return res.status(400).json({ message: 'Email and OTP are required' });
       }
-  
+    
       const user = await getUserByEmail(email);
       if (!user) {
         return res.status(400).json({ message: 'User not found' });
       }
-  
-      // ...
+    
+      // Compare the provided OTP with the OTP in the database
+      if (otp == user.otp) {
+        // OTP is valid
+        return res.status(200).json({ message: 'User has been successfully verified', user });
+      } else {
+        // Invalid OTP
+        return res.status(403).json({ message: 'Invalid credentials' });
+      }
+    
     } catch (err) {
       console.log(err);
       return res.status(500).json({ message: 'An unexpected error occurred' });
     }
   };
+  
