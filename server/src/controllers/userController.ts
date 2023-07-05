@@ -33,7 +33,7 @@ export const register = async (req: Request, res: Response) => {
       });
   
       await sendMail(
-        `Please verify your email with the OTP ${otp}`,
+        `Please verify your email with ${CLIENT_URL}?otp=${otp}`,
         email,
         'Mail verification'
       );
