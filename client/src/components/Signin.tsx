@@ -45,9 +45,10 @@ const Signin = () => {
       if (response.status === 200) {
         // Sign-in successful, check if OTP verification is required
         if (response.data.user.verified) {
+          setShowOtpModal(true);
           console.log("User has been successfully verified");
 
-          setShowOtpModal(true);
+          
         } else {
           // OTP verification required
           console.log("OTP verification required");
